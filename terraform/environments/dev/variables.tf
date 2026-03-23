@@ -15,3 +15,10 @@ variable "azs" {
   type        = list(string)
   default     = ["us-east-1b", "us-east-1c"]
 }
+
+# terraform/environments/dev/variables.tf
+variable "cluster_version" {
+  description = "Kubernetes version"
+  type        = string
+  default     = "1.35"
+}
