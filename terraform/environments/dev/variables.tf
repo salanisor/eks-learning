@@ -9,3 +9,9 @@ variable "cluster_name" {
   type        = string
   default     = "eks-learning"
 }
+
+variable "azs" {
+  description = "Availability zones to deploy into"
+  type        = list(string)
+  default     = ["us-east-1b", "us-east-1c"]
+}
