@@ -13,6 +13,7 @@ spec:
       labels:
         app: test-app
     spec:
+      serviceAccountName: test-app-sa
       containers:
         - name: test-app
           image: public.ecr.aws/docker/library/nginx:alpine

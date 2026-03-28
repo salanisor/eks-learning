@@ -56,3 +56,27 @@ module "alb_controller" {
   oidc_provider_arn = module.eks.oidc_provider_arn
   oidc_provider_url = module.eks.oidc_provider_url
 }
+
+module "test_app_iam" {
+  source = "../../modules/app-iam"
+
+  cluster_name         = var.cluster_name
+  namespace            = "test-app"
+  service_account_name = "test-app-sa"
+  role_name            = "eks-learning-test-app"
+
+  inline_policy_json = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowReadOnlyS3Access"
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:ListBucket"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}

@@ -17,3 +17,7 @@ output "cluster_name" {
 output "cluster_endpoint" {
   value = module.eks.cluster_endpoint
 }
+
+output "test_app_role_arn" {
+  value = module.test_app_iam.role_arn
+}

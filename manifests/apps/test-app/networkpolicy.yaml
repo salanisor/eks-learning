@@ -54,3 +54,24 @@ spec:
           port: 53
         - protocol: TCP
           port: 53
+
+---
+# Allow egress to Pod Identity Agent on the node
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-pod-identity-egress
+  namespace: test-app
+spec:
+  podSelector:
+    matchLabels:
+      app: test-app
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 169.254.170.23/32
+      ports:
+        - protocol: TCP
+          port: 80
