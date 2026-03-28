@@ -18,6 +18,14 @@ output "cluster_endpoint" {
   value = module.eks.cluster_endpoint
 }
 
-output "test_app_role_arn" {
-  value = module.test_app_iam.role_arn
+output "test_app_namespace" {
+  value = module.team_test_app.namespace
+}
+
+output "test_app_eso_role_arn" {
+  value = module.team_test_app.eso_role_arn
+}
+
+output "test_app_app_role_arn" {
+  value = module.team_test_app.app_role_arn
 }

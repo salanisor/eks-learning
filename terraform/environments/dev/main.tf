@@ -67,28 +67,31 @@ module "alb_controller" {
   oidc_provider_url = module.eks.oidc_provider_url
 }
 
-module "test_app_iam" {
-  source = "../../modules/app-iam"
+module "external_secrets" {
+  source       = "../../modules/external-secrets"
+  cluster_name = var.cluster_name
+}
 
-  cluster_name         = var.cluster_name
-  namespace            = "test-app"
-  service_account_name = "test-app-sa"
-  role_name            = "eks-learning-test-app"
+module "team_test_app" {
+  source         = "../../modules/team"
+  cluster_name   = var.cluster_name
+  team_name      = "test-app"
+  environment    = "dev"
+  aws_account_id = "684177687615"
 
-  inline_policy_json = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid    = "AllowReadOnlyS3Access"
-        Effect = "Allow"
-        Action = [
-          "s3:GetObject",
-          "s3:ListBucket"
-        ]
-        Resource = "*"
-      }
-    ]
-  })
+  app_policy_statements = [
+    {
+      Sid    = "AllowReadOnlyS3Access"
+      Effect = "Allow"
+      Action = [
+        "s3:GetObject",
+        "s3:ListBucket"
+      ]
+      Resource = "*"
+    }
+  ]
+
+  depends_on = [module.external_secrets]
 }
 
 module "eks_auth" {
