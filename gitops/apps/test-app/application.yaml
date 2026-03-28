@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: app-of-apps
+  name: test-app
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,10 +10,10 @@ spec:
   source:
     repoURL: https://github.com/salanisor/eks-learning
     targetRevision: main
-    path: gitops/apps
+    path: gitops/apps/test-app
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: test-app
   syncPolicy:
     automated:
       prune: true
@@ -21,3 +21,8 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+  ignoreDifferences:
+    - group: external-secrets.io
+      kind: ExternalSecret
+      jsonPointers:
+        - /spec/refreshInterval
