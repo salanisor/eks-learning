@@ -48,6 +48,16 @@ provider "helm" {
   }
 }
 
+provider "kubernetes" {
+  host                   = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_ca_certificate)
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    command     = "aws"
+    args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+  }
+}
+
 module "alb_controller" {
   source = "../../modules/alb-controller"
 
@@ -79,4 +89,12 @@ module "test_app_iam" {
       }
     ]
   })
+}
+
+module "eks_auth" {
+  source = "../../modules/eks-auth"
+
+  cluster_name   = var.cluster_name
+  node_role_arn  = module.eks.node_role_arn
+  admin_iam_arns = ["arn:aws:iam::684177687615:user/rosa-sa"]
 }
