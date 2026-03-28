@@ -22,3 +22,9 @@ variable "cluster_version" {
   type        = string
   default     = "1.35"
 }
+
+variable "github_repo_url" {
+  description = "GitHub repository URL for GitOps"
+  type        = string
+  default     = "https://github.com/salanisor/eks-learning"
+}

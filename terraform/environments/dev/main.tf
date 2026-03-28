@@ -20,22 +20,6 @@ provider "aws" {
   }
 }
 
-module "vpc" {
-  source       = "../../modules/vpc"
-  cluster_name = var.cluster_name
-  azs          = var.azs
-}
-
-module "eks" {
-  source = "../../modules/eks"
-
-  cluster_name       = var.cluster_name
-  cluster_version    = var.cluster_version
-  vpc_id             = module.vpc.vpc_id
-  private_subnet_ids = module.vpc.private_subnet_ids
-  public_subnet_ids  = module.vpc.public_subnet_ids
-}
-
 provider "helm" {
   kubernetes = {
     host                   = module.eks.cluster_endpoint
@@ -58,6 +42,22 @@ provider "kubernetes" {
   }
 }
 
+module "vpc" {
+  source       = "../../modules/vpc"
+  cluster_name = var.cluster_name
+  azs          = var.azs
+}
+
+module "eks" {
+  source = "../../modules/eks"
+
+  cluster_name       = var.cluster_name
+  cluster_version    = var.cluster_version
+  vpc_id             = module.vpc.vpc_id
+  private_subnet_ids = module.vpc.private_subnet_ids
+  public_subnet_ids  = module.vpc.public_subnet_ids
+}
+
 module "alb_controller" {
   source = "../../modules/alb-controller"
 
@@ -67,13 +67,26 @@ module "alb_controller" {
   oidc_provider_url = module.eks.oidc_provider_url
 }
 
-module "external_secrets" {
-  source       = "../../modules/external-secrets"
-  cluster_name = var.cluster_name
+module "eks_auth" {
+  source = "../../modules/eks-auth"
+
+  cluster_name   = var.cluster_name
+  node_role_arn  = module.eks.node_role_arn
+  admin_iam_arns = ["arn:aws:iam::684177687615:user/rosa-sa"]
+}
+
+module "argocd" {
+  source = "../../modules/argocd"
+
+  cluster_name    = var.cluster_name
+  github_repo_url = var.github_repo_url
+
+  depends_on = [module.eks]
 }
 
 module "team_test_app" {
-  source         = "../../modules/team"
+  source = "../../modules/team"
+
   cluster_name   = var.cluster_name
   team_name      = "test-app"
   environment    = "dev"
@@ -91,13 +104,5 @@ module "team_test_app" {
     }
   ]
 
-  depends_on = [module.external_secrets]
-}
-
-module "eks_auth" {
-  source = "../../modules/eks-auth"
-
-  cluster_name   = var.cluster_name
-  node_role_arn  = module.eks.node_role_arn
-  admin_iam_arns = ["arn:aws:iam::684177687615:user/rosa-sa"]
+  depends_on = [module.argocd]
 }
