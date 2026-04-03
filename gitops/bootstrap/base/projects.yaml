@@ -1,0 +1,66 @@
+# Platform project — for operators and platform components
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Platform operators and infrastructure components
+  sourceRepos:
+    - https://github.com/salanisor/eks-learning
+    - https://charts.external-secrets.io
+    - https://charts.jetstack.io
+  destinations:
+    - namespace: external-secrets
+      server: https://kubernetes.default.svc
+    - namespace: cert-manager
+      server: https://kubernetes.default.svc
+    - namespace: kube-system
+      server: https://kubernetes.default.svc
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+---
+# Dev tenant project — for application teams on dev cluster
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: dev-tenants
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Application team workloads on dev cluster
+  sourceRepos:
+    - https://github.com/salanisor/eks-learning
+  destinations:
+    - namespace: test-app
+      server: https://kubernetes.default.svc
+    - namespace: '*'
+      server: https://kubernetes.default.svc
+  namespaceResourceWhitelist:
+    - group: apps
+      kind: Deployment
+    - group: apps
+      kind: ReplicaSet
+    - group: ""
+      kind: Service
+    - group: ""
+      kind: ServiceAccount
+    - group: ""
+      kind: ConfigMap
+    - group: ""
+      kind: Secret
+    - group: networking.k8s.io
+      kind: Ingress
+    - group: networking.k8s.io
+      kind: NetworkPolicy
+    - group: external-secrets.io
+      kind: ExternalSecret
+    - group: external-secrets.io
+      kind: SecretStore
+  clusterResourceWhitelist: []

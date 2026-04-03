@@ -1,4 +1,12 @@
-# Bind test-app-role to the test-app service account
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-app
+  labels:
+    team: test-app
+    environment: dev
+    managed-by: argocd
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:

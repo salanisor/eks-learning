@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: operators
+  name: test-app
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: dev-tenants
   source:
     repoURL: https://github.com/salanisor/eks-learning
     targetRevision: main
-    path: gitops/operators
+    path: manifests/apps/test-app
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: test-app
   syncPolicy:
     automated:
       prune: true

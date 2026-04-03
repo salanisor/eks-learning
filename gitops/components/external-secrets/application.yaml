@@ -1,23 +1,28 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: platform
+  name: external-secrets
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: platform
   source:
-    repoURL: https://github.com/salanisor/eks-learning
-    targetRevision: main
-    path: gitops/platform
+    repoURL: https://charts.external-secrets.io
+    chart: external-secrets
+    targetRevision: 0.9.13
+    helm:
+      values: |
+        installCRDs: true
+        serviceAccount:
+          create: true
+          name: external-secrets
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: external-secrets
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true
