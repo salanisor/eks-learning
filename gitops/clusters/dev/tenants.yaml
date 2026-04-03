@@ -6,7 +6,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: platform
+  project: dev-tenants
   source:
     repoURL: https://github.com/salanisor/eks-learning
     targetRevision: main
