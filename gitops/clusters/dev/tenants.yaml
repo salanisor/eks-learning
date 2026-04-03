@@ -6,13 +6,14 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: dev-tenants
+  project: platform
   source:
     repoURL: https://github.com/salanisor/eks-learning
     targetRevision: main
-    path: gitops/tenants/dev
+    path: gitops/clusters/dev
     directory:
-      recurse: true
+      recurse: false
+      include: '*-application.yaml'
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

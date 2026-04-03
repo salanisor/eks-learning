@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/salanisor/eks-learning
     targetRevision: main
-    path: manifests/apps/test-app
+    path: gitops/tenants/dev/test-app
   destination:
     server: https://kubernetes.default.svc
     namespace: test-app
