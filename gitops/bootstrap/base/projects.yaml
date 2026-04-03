@@ -61,6 +61,10 @@ spec:
       kind: ExternalSecret
     - group: external-secrets.io
       kind: SecretStore
+    - group: rbac.authorization.k8s.io
+      kind: RoleBinding
+    - group: rbac.authorization.k8s.io
+      kind: Role
   clusterResourceWhitelist:
     - group: argoproj.io
       kind: Application
