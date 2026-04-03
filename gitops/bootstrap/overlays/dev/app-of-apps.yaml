@@ -12,7 +12,8 @@ spec:
     targetRevision: main
     path: gitops/clusters/dev
     directory:
-      recurse: true
+      recurse: false
+      include: '{components.yaml,tenants.yaml}'
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
