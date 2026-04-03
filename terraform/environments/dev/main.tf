@@ -75,6 +75,15 @@ module "eks_auth" {
   admin_iam_arns = ["arn:aws:iam::684177687615:user/rosa-sa"]
 }
 
+module "argocd" {
+  source = "../../modules/argocd"
+
+  cluster_name    = var.cluster_name
+  github_repo_url = var.github_repo_url
+
+  depends_on = [module.eks]
+}
+
 module "team_test_app" {
   source = "../../modules/team"
 
@@ -95,13 +104,3 @@ module "team_test_app" {
     }
   ]
 }
-
-# ArgoCD — disabled until Phase 6
-# module "argocd" {
-#   source = "../../modules/argocd"
-#
-#   cluster_name    = var.cluster_name
-#   github_repo_url = var.github_repo_url
-#
-#   depends_on = [module.eks]
-# }

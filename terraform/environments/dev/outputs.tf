@@ -29,3 +29,11 @@ output "test_app_eso_role_arn" {
 output "test_app_app_role_arn" {
   value = module.team_test_app.app_role_arn
 }
+
+output "argocd_namespace" {
+  value = module.argocd.argocd_namespace
+}
+
+output "argocd_role_arn" {
+  value = module.argocd.argocd_role_arn
+}
