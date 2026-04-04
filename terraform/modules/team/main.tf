@@ -12,6 +12,32 @@ data "aws_iam_policy_document" "pod_identity_trust" {
   }
 }
 
+data "aws_iam_policy_document" "eso_role_trust" {
+  statement {
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["pods.eks.amazonaws.com"]
+    }
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.aws_account_id}:role/${var.cluster_name}-eso"]
+    }
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession"
+    ]
+  }
+}
+
 # ── Kubernetes namespace ──────────────────────────────────────────────────────
 resource "kubernetes_namespace_v1" "this" {
   metadata {
@@ -27,7 +53,7 @@ resource "kubernetes_namespace_v1" "this" {
 # ── ESO IAM role — scoped to this team's secret path only ─────────────────────
 resource "aws_iam_role" "eso" {
   name               = "${var.cluster_name}-eso-${var.team_name}"
-  assume_role_policy = data.aws_iam_policy_document.pod_identity_trust.json
+  assume_role_policy = data.aws_iam_policy_document.eso_role_trust.json
 
   tags = {
     Name        = "${var.cluster_name}-eso-${var.team_name}"

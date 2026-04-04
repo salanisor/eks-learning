@@ -70,9 +70,10 @@ module "alb_controller" {
 module "eks_auth" {
   source = "../../modules/eks-auth"
 
-  cluster_name   = var.cluster_name
-  node_role_arn  = module.eks.node_role_arn
-  admin_iam_arns = ["arn:aws:iam::684177687615:user/rosa-sa"]
+  cluster_name    = var.cluster_name
+  node_role_arn   = module.eks.node_role_arn
+  node_group_id   = module.eks.node_group_id
+  admin_iam_arns  = ["arn:aws:iam::684177687615:user/rosa-sa"]
 }
 
 module "argocd" {
@@ -112,4 +113,11 @@ module "team_test_app" {
       Resource = "*"
     }
   ]
+}
+
+module "external_secrets" {
+  source       = "../../modules/external-secrets"
+  cluster_name = var.cluster_name
+
+  depends_on = [module.eks]
 }

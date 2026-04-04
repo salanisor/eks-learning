@@ -19,3 +19,9 @@ variable "readonly_iam_arns" {
   type        = list(string)
   default     = []
 }
+
+variable "node_group_id" {
+  description = "Node group ID to ensure nodes exist before updating aws-auth"
+  type        = string
+  default     = ""
+}

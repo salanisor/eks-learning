@@ -1,4 +1,4 @@
-output "chart_version" {
-  description = "Installed ESO chart version"
-  value       = helm_release.external_secrets.version
+output "eso_role_arn" {
+  description = "ESO base IAM role ARN"
+  value       = aws_iam_role.eso.arn
 }

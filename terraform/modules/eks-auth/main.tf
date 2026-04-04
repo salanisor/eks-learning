@@ -6,7 +6,6 @@ locals {
       groups   = ["system:masters"]
     }
   ]
-
   readonly_users = [
     for arn in var.readonly_iam_arns : {
       userarn  = arn
@@ -34,10 +33,16 @@ resource "kubernetes_config_map_v1_data" "aws_auth" {
         }
       ],
     ))
-
     mapUsers = yamlencode(concat(
       local.admin_users,
       local.readonly_users
     ))
+  }
+
+  lifecycle {
+    precondition {
+      condition     = var.node_group_id != ""
+      error_message = "node_group_id must be set to ensure aws-auth configmap exists before modification"
+    }
   }
 }
