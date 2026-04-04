@@ -1,3 +1,4 @@
+# Default deny all ingress and egress
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -9,6 +10,25 @@ spec:
     - Ingress
     - Egress
 ---
+# Allow all traffic within the same namespace
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace
+  namespace: test-app
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector: {}
+  egress:
+    - to:
+        - podSelector: {}
+---
+# Allow ingress from ALB
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -28,15 +48,14 @@ spec:
         - protocol: TCP
           port: 80
 ---
+# Allow egress to DNS only
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-dns-egress
   namespace: test-app
 spec:
-  podSelector:
-    matchLabels:
-      app: test-app
+  podSelector: {}
   policyTypes:
     - Egress
   egress:
@@ -50,15 +69,14 @@ spec:
         - protocol: TCP
           port: 53
 ---
+# Allow egress to Pod Identity Agent
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-pod-identity-egress
   namespace: test-app
 spec:
-  podSelector:
-    matchLabels:
-      app: test-app
+  podSelector: {}
   policyTypes:
     - Egress
   egress:
@@ -68,3 +86,18 @@ spec:
       ports:
         - protocol: TCP
           port: 80
+---
+# Allow egress to AWS APIs (HTTPS)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-aws-api-egress
+  namespace: test-app
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - ports:
+        - protocol: TCP
+          port: 443

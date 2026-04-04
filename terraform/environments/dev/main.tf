@@ -128,13 +128,19 @@ module "team_test_app" {
 module "team_payments" {
   source = "../../modules/team"
 
-  cluster_name   = var.cluster_name
-  team_name      = "payments"
-  environment    = "dev"
-  aws_account_id = "684177687615"
-  repo_url       = var.github_repo_url
-  ingress_order  = 30
-  domain_name    = var.domain_name
+  cluster_name          = var.cluster_name
+  team_name             = "payments"
+  environment           = "dev"
+  aws_account_id        = "684177687615"
+  repo_url              = var.github_repo_url
+  ingress_order         = 30
+  domain_name           = var.domain_name
+  enable_resource_quota = true
+  resource_quota_cpu_requests    = "2"
+  resource_quota_cpu_limits      = "4"
+  resource_quota_memory_requests = "2Gi"
+  resource_quota_memory_limits   = "4Gi"
+  resource_quota_pods            = "10"
 
   app_policy_statements = [
     {

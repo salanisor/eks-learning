@@ -211,3 +211,17 @@ resource "local_file" "service" {
   })
   filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/service.yaml"
 }
+
+resource "local_file" "resourcequota" {
+  count = var.enable_resource_quota ? 1 : 0
+
+  content = templatefile("${path.module}/../../templates/gitops/resourcequota.yaml.tpl", {
+    team_name      = var.team_name
+    cpu_requests   = var.resource_quota_cpu_requests
+    cpu_limits     = var.resource_quota_cpu_limits
+    memory_requests = var.resource_quota_memory_requests
+    memory_limits  = var.resource_quota_memory_limits
+    pods           = var.resource_quota_pods
+  })
+  filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/resourcequota.yaml"
+}

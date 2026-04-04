@@ -51,6 +51,8 @@ spec:
       kind: ConfigMap
     - group: ""
       kind: Secret
+    - group: ""
+      kind: ResourceQuota
     - group: networking.k8s.io
       kind: Ingress
     - group: networking.k8s.io

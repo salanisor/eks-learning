@@ -46,3 +46,39 @@ variable "domain_name" {
   type        = string
   default     = "keights.net"
 }
+
+variable "enable_resource_quota" {
+  description = "Enable resource quota for the team namespace"
+  type        = bool
+  default     = false
+}
+
+variable "resource_quota_cpu_requests" {
+  description = "Total CPU requests limit for the namespace"
+  type        = string
+  default     = "4"
+}
+
+variable "resource_quota_cpu_limits" {
+  description = "Total CPU limits for the namespace"
+  type        = string
+  default     = "8"
+}
+
+variable "resource_quota_memory_requests" {
+  description = "Total memory requests limit for the namespace"
+  type        = string
+  default     = "4Gi"
+}
+
+variable "resource_quota_memory_limits" {
+  description = "Total memory limits for the namespace"
+  type        = string
+  default     = "8Gi"
+}
+
+variable "resource_quota_pods" {
+  description = "Maximum number of pods in the namespace"
+  type        = string
+  default     = "20"
+}
