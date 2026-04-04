@@ -3,8 +3,6 @@ kind: AppProject
 metadata:
   name: platform
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   description: Platform operators and infrastructure components
   sourceRepos:
@@ -29,8 +27,6 @@ kind: AppProject
 metadata:
   name: dev-tenants
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   description: Application team workloads on dev cluster
   sourceRepos:
@@ -70,3 +66,5 @@ spec:
       kind: Application
     - group: ""
       kind: Namespace
+    - group: external-secrets.io
+      kind: ClusterSecretStore
