@@ -36,7 +36,7 @@ Replace `{team-name}` with your team name (e.g. `orders`, `inventory`).
 
 ## Step 2 — Add the team module to Terraform
 
-Edit `terraform/environments/dev/main.tf` and add a new module block:
+Edit `terraform/environments/dev/tenants.tf` and add a new module block:
 ```hcl
 module "team_{team_name}" {
   source = "../../modules/team"
@@ -225,7 +225,7 @@ To remove a team from the cluster:
 # 1. Delete the ArgoCD application
 kubectl delete application {team-name} -n argocd
 
-# 2. Remove the module block from terraform/environments/dev/main.tf
+# 2. Remove the module block from terraform/environments/dev/tenants.tf
 
 # 3. Remove the team from the appproject teams list in main.tf
 
