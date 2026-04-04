@@ -84,6 +84,15 @@ module "argocd" {
   depends_on = [module.eks]
 }
 
+module "external_dns" {
+  source = "../../modules/external-dns"
+
+  cluster_name = var.cluster_name
+  aws_region   = var.aws_region
+
+  depends_on = [module.eks]
+}
+
 module "team_test_app" {
   source = "../../modules/team"
 
