@@ -19,6 +19,13 @@ spec:
           image: public.ecr.aws/docker/library/nginx:alpine
           ports:
             - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
           env:
             - name: DB_USERNAME
               valueFrom:

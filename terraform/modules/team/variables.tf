@@ -82,3 +82,33 @@ variable "resource_quota_pods" {
   type        = string
   default     = "20"
 }
+
+variable "enable_hpa" {
+  description = "Enable HorizontalPodAutoscaler for the team deployment"
+  type        = bool
+  default     = false
+}
+
+variable "hpa_min_replicas" {
+  description = "Minimum number of replicas"
+  type        = number
+  default     = 2
+}
+
+variable "hpa_max_replicas" {
+  description = "Maximum number of replicas"
+  type        = number
+  default     = 10
+}
+
+variable "hpa_cpu_target" {
+  description = "Target CPU utilization percentage"
+  type        = number
+  default     = 70
+}
+
+variable "hpa_memory_target" {
+  description = "Target memory utilization percentage"
+  type        = number
+  default     = 80
+}

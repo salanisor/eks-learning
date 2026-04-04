@@ -101,67 +101,6 @@ module "external_dns" {
   depends_on = [module.eks]
 }
 
-module "team_test_app" {
-  source = "../../modules/team"
-
-  cluster_name   = var.cluster_name
-  team_name      = "test-app"
-  environment    = "dev"
-  aws_account_id = "684177687615"
-  repo_url       = var.github_repo_url
-  ingress_order  = 20
-  domain_name    = var.domain_name
-
-  app_policy_statements = [
-    {
-      Sid    = "AllowReadOnlyS3Access"
-      Effect = "Allow"
-      Action = [
-        "s3:GetObject",
-        "s3:ListBucket"
-      ]
-      Resource = "*"
-    }
-  ]
-}
-
-module "team_payments" {
-  source = "../../modules/team"
-
-  cluster_name          = var.cluster_name
-  team_name             = "payments"
-  environment           = "dev"
-  aws_account_id        = "684177687615"
-  repo_url              = var.github_repo_url
-  ingress_order         = 30
-  domain_name           = var.domain_name
-  enable_resource_quota = true
-  resource_quota_cpu_requests    = "2"
-  resource_quota_cpu_limits      = "4"
-  resource_quota_memory_requests = "2Gi"
-  resource_quota_memory_limits   = "4Gi"
-  resource_quota_pods            = "10"
-
-  app_policy_statements = [
-    {
-      Sid    = "AllowReadOnlyS3Access"
-      Effect = "Allow"
-      Action = [
-        "s3:GetObject",
-        "s3:ListBucket"
-      ]
-      Resource = "*"
-    }
-  ]
-}
-
-resource "local_file" "appproject" {
-  content = templatefile("${path.module}/../../templates/gitops/appproject.yaml.tpl", {
-    teams = ["test-app", "payments"]
-  })
-  filename = "${path.module}/../../../gitops/bootstrap/base/projects.yaml"
-}
-
 module "cloudwatch_alarms" {
   source = "../../modules/cloudwatch-alarms"
 

@@ -225,3 +225,16 @@ resource "local_file" "resourcequota" {
   })
   filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/resourcequota.yaml"
 }
+
+resource "local_file" "hpa" {
+  count = var.enable_hpa ? 1 : 0
+
+  content = templatefile("${path.module}/../../templates/gitops/hpa.yaml.tpl", {
+    team_name      = var.team_name
+    min_replicas   = var.hpa_min_replicas
+    max_replicas   = var.hpa_max_replicas
+    cpu_target     = var.hpa_cpu_target
+    memory_target  = var.hpa_memory_target
+  })
+  filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/hpa.yaml"
+}
