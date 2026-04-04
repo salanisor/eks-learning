@@ -9,11 +9,11 @@ metadata:
     alb.ingress.kubernetes.io/group.name: eks-learning-shared
     alb.ingress.kubernetes.io/group.order: "10"
     alb.ingress.kubernetes.io/backend-protocol: HTTP
-    external-dns.alpha.kubernetes.io/hostname: argocd.freebsd.tv
+    external-dns.alpha.kubernetes.io/hostname: argocd.keights.net
 spec:
   ingressClassName: alb
   rules:
-    - host: argocd.freebsd.tv
+    - host: argocd.keights.net
       http:
         paths:
           - path: /

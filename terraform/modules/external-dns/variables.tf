@@ -17,11 +17,11 @@ variable "aws_region" {
 variable "hosted_zone_id" {
   description = "Route53 hosted zone ID to manage"
   type        = string
-  default     = "Z06238381OIYPB4ITJ8RK"
+  default     = "Z00485131ZWCE1MJ6D68X"
 }
 
 variable "domain_filter" {
   description = "Domain filter for ExternalDNS"
   type        = string
-  default     = "freebsd.tv"
+  default     = "keights.net"
 }
