@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-app
-  namespace: test-app
+  name: payments
+  namespace: payments
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: test-app
+      app: payments
   template:
     metadata:
       labels:
-        app: test-app
+        app: payments
     spec:
-      serviceAccountName: test-app-sa
+      serviceAccountName: payments-sa
       containers:
-        - name: test-app
+        - name: payments
           image: public.ecr.aws/docker/library/nginx:alpine
           ports:
             - containerPort: 80

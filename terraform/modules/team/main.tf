@@ -197,3 +197,17 @@ resource "local_file" "ingress" {
   })
   filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/ingress.yaml"
 }
+
+resource "local_file" "deployment" {
+  content = templatefile("${path.module}/../../templates/gitops/deployment.yaml.tpl", {
+    team_name = var.team_name
+  })
+  filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/deployment.yaml"
+}
+
+resource "local_file" "service" {
+  content = templatefile("${path.module}/../../templates/gitops/service.yaml.tpl", {
+    team_name = var.team_name
+  })
+  filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/service.yaml"
+}

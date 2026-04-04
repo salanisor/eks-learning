@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-app
-  namespace: test-app
+  name: ${team_name}
+  namespace: ${team_name}
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: test-app
+      app: ${team_name}
   template:
     metadata:
       labels:
-        app: test-app
+        app: ${team_name}
     spec:
-      serviceAccountName: test-app-sa
+      serviceAccountName: ${team_name}-sa
       containers:
-        - name: test-app
+        - name: ${team_name}
           image: public.ecr.aws/docker/library/nginx:alpine
           ports:
             - containerPort: 80
