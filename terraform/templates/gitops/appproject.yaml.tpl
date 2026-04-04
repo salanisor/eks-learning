@@ -32,10 +32,10 @@ spec:
   sourceRepos:
     - https://github.com/salanisor/eks-learning
   destinations:
-    - namespace: test-app
+%{ for team in teams ~}
+    - namespace: ${team}
       server: https://kubernetes.default.svc
-    - namespace: payments
-      server: https://kubernetes.default.svc
+%{ endfor ~}
     - namespace: argocd
       server: https://kubernetes.default.svc
   namespaceResourceWhitelist:

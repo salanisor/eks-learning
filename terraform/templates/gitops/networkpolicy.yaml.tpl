@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: default-deny-all
-  namespace: test-app
+  namespace: ${team_name}
 spec:
   podSelector: {}
   policyTypes:
@@ -13,11 +13,11 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-alb-ingress
-  namespace: test-app
+  namespace: ${team_name}
 spec:
   podSelector:
     matchLabels:
-      app: test-app
+      app: ${team_name}
   policyTypes:
     - Ingress
   ingress:
@@ -32,11 +32,11 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-dns-egress
-  namespace: test-app
+  namespace: ${team_name}
 spec:
   podSelector:
     matchLabels:
-      app: test-app
+      app: ${team_name}
   policyTypes:
     - Egress
   egress:
@@ -54,11 +54,11 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-pod-identity-egress
-  namespace: test-app
+  namespace: ${team_name}
 spec:
   podSelector:
     matchLabels:
-      app: test-app
+      app: ${team_name}
   policyTypes:
     - Egress
   egress:

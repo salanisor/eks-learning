@@ -138,3 +138,62 @@ resource "aws_eks_pod_identity_association" "app" {
 
   depends_on = [kubernetes_namespace_v1.this]
 }
+
+# ── Generate GitOps manifests ─────────────────────────────────────────────────
+resource "local_file" "clustersecretstore" {
+  content = templatefile("${path.module}/../../templates/gitops/clustersecretstore.yaml.tpl", {
+    team_name    = var.team_name
+    aws_region   = var.aws_region
+    eso_role_arn = aws_iam_role.eso.arn
+  })
+  filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/clustersecretstore.yaml"
+}
+
+resource "local_file" "externalsecret" {
+  content = templatefile("${path.module}/../../templates/gitops/externalsecret.yaml.tpl", {
+    team_name    = var.team_name
+    cluster_name = var.cluster_name
+    environment  = var.environment
+  })
+  filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/externalsecret.yaml"
+}
+
+resource "local_file" "argocd_application" {
+  content = templatefile("${path.module}/../../templates/gitops/argocd-application.yaml.tpl", {
+    team_name   = var.team_name
+    environment = var.environment
+    repo_url    = var.repo_url
+  })
+  filename = "${path.module}/../../../gitops/clusters/${var.environment}/${var.team_name}-application.yaml"
+}
+
+resource "local_file" "namespace" {
+  content = templatefile("${path.module}/../../templates/gitops/namespace.yaml.tpl", {
+    team_name   = var.team_name
+    environment = var.environment
+  })
+  filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/namespace.yaml"
+}
+
+resource "local_file" "serviceaccount" {
+  content = templatefile("${path.module}/../../templates/gitops/serviceaccount.yaml.tpl", {
+    team_name = var.team_name
+  })
+  filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/serviceaccount.yaml"
+}
+
+resource "local_file" "networkpolicy" {
+  content = templatefile("${path.module}/../../templates/gitops/networkpolicy.yaml.tpl", {
+    team_name = var.team_name
+  })
+  filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/networkpolicy.yaml"
+}
+
+resource "local_file" "ingress" {
+  content = templatefile("${path.module}/../../templates/gitops/ingress.yaml.tpl", {
+    team_name     = var.team_name
+    ingress_order = var.ingress_order
+    domain_name   = var.domain_name
+  })
+  filename = "${path.module}/../../../gitops/tenants/${var.environment}/${var.team_name}/ingress.yaml"
+}

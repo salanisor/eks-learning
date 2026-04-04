@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: test-app
+  name: ${team_name}
   namespace: argocd
 spec:
   project: dev-tenants
   source:
-    repoURL: https://github.com/salanisor/eks-learning
+    repoURL: ${repo_url}
     targetRevision: main
-    path: gitops/tenants/dev/test-app
+    path: gitops/tenants/${environment}/${team_name}
   destination:
     server: https://kubernetes.default.svc
-    namespace: test-app
+    namespace: ${team_name}
   syncPolicy:
     automated:
       prune: true

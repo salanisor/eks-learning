@@ -28,3 +28,9 @@ variable "github_repo_url" {
   type        = string
   default     = "https://github.com/salanisor/eks-learning"
 }
+
+variable "domain_name" {
+  description = "Domain name for ingress hostnames"
+  type        = string
+  default     = "keights.net"
+}

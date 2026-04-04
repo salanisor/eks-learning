@@ -1,25 +1,25 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: test-app
-  namespace: test-app
+  name: ${team_name}
+  namespace: ${team_name}
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/group.name: eks-learning-shared
-    alb.ingress.kubernetes.io/group.order: "20"
+    alb.ingress.kubernetes.io/group.order: "${ingress_order}"
     alb.ingress.kubernetes.io/backend-protocol: HTTP
-    external-dns.alpha.kubernetes.io/hostname: test-app.keights.net
+    external-dns.alpha.kubernetes.io/hostname: ${team_name}.${domain_name}
 spec:
   ingressClassName: alb
   rules:
-    - host: test-app.keights.net
+    - host: ${team_name}.${domain_name}
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: test-app
+                name: ${team_name}
                 port:
                   number: 80

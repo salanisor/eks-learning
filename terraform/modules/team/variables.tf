@@ -29,3 +29,20 @@ variable "app_policy_statements" {
   type        = any
   default     = []
 }
+variable "repo_url" {
+  description = "GitHub repository URL for GitOps"
+  type        = string
+  default     = "https://github.com/salanisor/eks-learning"
+}
+
+variable "ingress_order" {
+  description = "ALB ingress group order for this team"
+  type        = number
+  default     = 50
+}
+
+variable "domain_name" {
+  description = "Domain name for ingress hostname"
+  type        = string
+  default     = "keights.net"
+}
