@@ -161,3 +161,12 @@ resource "local_file" "appproject" {
   })
   filename = "${path.module}/../../../gitops/bootstrap/base/projects.yaml"
 }
+
+module "cloudwatch_alarms" {
+  source = "../../modules/cloudwatch-alarms"
+
+  cluster_name = var.cluster_name
+  sns_email    = var.sns_email
+
+  depends_on = [module.eks]
+}

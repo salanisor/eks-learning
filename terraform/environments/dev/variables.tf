@@ -34,3 +34,9 @@ variable "domain_name" {
   type        = string
   default     = "keights.net"
 }
+
+variable "sns_email" {
+  description = "Email address for CloudWatch alarm notifications"
+  type        = string
+  default     = ""
+}

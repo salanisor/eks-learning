@@ -41,3 +41,7 @@ output "argocd_role_arn" {
 output "eso_role_arn" {
   value = module.external_secrets.eso_role_arn
 }
+
+output "sns_topic_arn" {
+  value = module.cloudwatch_alarms.sns_topic_arn
+}
