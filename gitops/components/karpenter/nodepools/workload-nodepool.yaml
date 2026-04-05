@@ -26,7 +26,7 @@ spec:
           operator: In
           values: ["t3.medium", "t3.large", "t3.xlarge", "t3a.medium", "t3a.large"]
   disruption:
-    consolidationPolicy: WhenUnderutilized
+    consolidationPolicy: WhenEmptyOrUnderutilized
     consolidateAfter: 30m
     budgets:
       - nodes: "10%"
