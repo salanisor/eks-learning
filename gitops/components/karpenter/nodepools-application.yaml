@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/salanisor/eks-learning
     targetRevision: main
-    path: gitops/components/karpenter/nodepools
+    path: gitops/karpenter/nodepools
   destination:
     server: https://kubernetes.default.svc
     namespace: karpenter
