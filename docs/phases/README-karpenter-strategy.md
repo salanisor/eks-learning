@@ -141,3 +141,42 @@ The following items are planned for Phase 6 production hardening:
 - Spot interruption handling via SQS and Node Termination Handler
 - Graviton (ARM) instance support in the workload NodePool for
   additional cost savings
+
+---
+
+## Phase 6 — System/Workload Node Separation
+
+Before enabling the system NodePool taint the following platform
+components need CriticalAddonsOnly tolerations added via their
+Helm values:
+
+| Component | Namespace | Method |
+|---|---|---|
+| ArgoCD | argocd | Helm values — tolerations block |
+| External Secrets Operator | external-secrets | Helm values — tolerations block |
+| ExternalDNS | external-dns | Helm values — tolerations block |
+| metrics-server | kube-system | Helm values — tolerations block |
+| AWS Load Balancer Controller | kube-system | Helm values — tolerations block |
+| CloudWatch Observability Controller | amazon-cloudwatch | EKS addon configuration |
+| cert-manager | cert-manager | Helm values — tolerations block |
+
+DaemonSets (aws-node, kube-proxy, eks-pod-identity-agent,
+cloudwatch-agent, fluent-bit) run on all nodes by design and
+do not require toleration changes.
+
+Once all Deployment tolerations are updated, enable the system
+NodePool taint:
+```yaml
+spec:
+  template:
+    spec:
+      taints:
+        - key: CriticalAddonsOnly
+          effect: NoSchedule
+```
+
+And add nodeSelector to all tenant deployment templates:
+```yaml
+nodeSelector:
+  node-type: workload
+```
