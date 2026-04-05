@@ -45,3 +45,10 @@ output "eso_role_arn" {
 output "sns_topic_arn" {
   value = module.cloudwatch_alarms.sns_topic_arn
 }
+output "karpenter_role_arn" {
+  value = module.karpenter.karpenter_role_arn
+}
+
+output "interruption_queue_name" {
+  value = module.karpenter.interruption_queue_name
+}

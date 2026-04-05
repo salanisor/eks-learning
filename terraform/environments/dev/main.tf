@@ -109,3 +109,15 @@ module "cloudwatch_alarms" {
 
   depends_on = [module.eks]
 }
+
+module "karpenter" {
+  source = "../../modules/karpenter"
+
+  cluster_name              = var.cluster_name
+  cluster_endpoint          = module.eks.cluster_endpoint
+  private_subnet_ids        = module.vpc.private_subnet_ids
+  cluster_security_group_id = module.eks.cluster_security_group_id
+  aws_account_id            = "684177687615"
+
+  depends_on = [module.eks]
+}

@@ -9,6 +9,8 @@ spec:
     - https://github.com/salanisor/eks-learning
     - https://charts.external-secrets.io
     - https://charts.jetstack.io
+    - https://kubernetes-sigs.github.io/metrics-server
+    - public.ecr.aws/karpenter
   destinations:
     - namespace: external-secrets
       server: https://kubernetes.default.svc
@@ -17,6 +19,8 @@ spec:
     - namespace: kube-system
       server: https://kubernetes.default.svc
     - namespace: argocd
+      server: https://kubernetes.default.svc
+    - namespace: karpenter
       server: https://kubernetes.default.svc
   clusterResourceWhitelist:
     - group: '*'
@@ -65,6 +69,8 @@ spec:
       kind: RoleBinding
     - group: rbac.authorization.k8s.io
       kind: Role
+    - group: autoscaling
+      kind: HorizontalPodAutoscaler
   clusterResourceWhitelist:
     - group: argoproj.io
       kind: Application
