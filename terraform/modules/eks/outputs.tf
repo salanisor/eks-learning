@@ -37,3 +37,7 @@ output "node_group_id" {
   description = "Node group ID"
   value       = aws_eks_node_group.main.id
 }
+output "cluster_primary_security_group_id" {
+  description = "EKS cluster primary security group ID used by nodes"
+  value       = aws_eks_cluster.main.vpc_config[0].cluster_security_group_id
+}

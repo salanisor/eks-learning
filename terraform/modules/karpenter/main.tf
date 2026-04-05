@@ -322,15 +322,8 @@ resource "aws_cloudwatch_event_target" "instance_state_change" {
   arn  = aws_sqs_queue.karpenter_interruption.arn
 }
 
-resource "aws_ec2_tag" "karpenter_subnets" {
-  for_each    = toset(var.private_subnet_ids)
-  resource_id = each.value
-  key         = "karpenter.sh/discovery"
-  value       = var.cluster_name
-}
-
 resource "aws_ec2_tag" "karpenter_security_group" {
-  resource_id = var.cluster_security_group_id
+  resource_id = var.cluster_primary_security_group_id
   key         = "karpenter.sh/discovery"
   value       = var.cluster_name
 }

@@ -19,12 +19,11 @@ variable "aws_account_id" {
   type        = string
 }
 
-variable "private_subnet_ids" {
-  description = "Private subnet IDs to tag for Karpenter discovery"
-  type        = list(string)
-}
-
 variable "cluster_security_group_id" {
   description = "Cluster security group ID to tag for Karpenter discovery"
+  type        = string
+}
+variable "cluster_primary_security_group_id" {
+  description = "EKS cluster primary security group ID used by nodes"
   type        = string
 }
