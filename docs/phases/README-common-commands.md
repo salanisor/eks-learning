@@ -15,7 +15,8 @@ aws cloudwatch describe-alarms \
   --region us-east-1
 
 # Sping things down
-kubectl delete ingress -n test-app test-app 2>/dev/null || true
+Step 1 — Remove Kubernetes resources first to clean up ALBs and DNS:
+bashkubectl delete ingress -n test-app test-app 2>/dev/null || true
 kubectl delete ingress -n payments payments 2>/dev/null || true
 kubectl delete ingress -n argocd argocd 2>/dev/null || true
 kubectl delete applications -n argocd --all 2>/dev/null || true
@@ -26,3 +27,27 @@ sleep 60
 
 # Verify Karpenter nodes are gone
 kubectl get nodes
+Step 2 — Verify ALBs are removed:
+bashaws elbv2 describe-load-balancers \
+  --query 'LoadBalancers[*].[LoadBalancerName,State.Code]' \
+  --output table --region us-east-1
+
+# Step 3 — Terraform destroy:
+bashcd terraform/environments/dev
+terraform destroy -auto-approve
+
+# Step 4 — Final commit:
+bashcd ~/git/eks-learning
+git add .
+git commit -m "chore: end of phase 5 session - spinning down to reduce cost"
+git push origin main
+
+# Step 5 — Verify nothing billable remains:
+bashaws eks list-clusters --region us-east-1
+aws ec2 describe-nat-gateways \
+  --filter Name=state,Values=available \
+  --query 'NatGateways[*].[NatGatewayId,State]' \
+  --output table --region us-east-1
+aws elbv2 describe-load-balancers \
+  --query 'LoadBalancers[*].[LoadBalancerName,State.Code]' \
+  --output table --region us-east-1
