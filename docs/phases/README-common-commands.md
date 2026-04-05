@@ -22,6 +22,30 @@ kubectl delete ingress -n argocd argocd 2>/dev/null || true
 kubectl delete applications -n argocd --all 2>/dev/null || true
 kubectl delete nodeclaims --all 2>/dev/null || true
 
+# Force remove ArgoCD CRDs
+kubectl delete crd applications.argoproj.io \
+  applicationsets.argoproj.io \
+  appprojects.argoproj.io \
+  --force --grace-period=0 2>/dev/null || true
+
+# Force delete ArgoCD namespace
+kubectl get namespace argocd -o json | \
+  python3 -c "
+import json,sys
+ns=json.load(sys.stdin)
+ns['spec']['finalizers']=[]
+print(json.dumps(ns))
+" | kubectl replace --raw /api/v1/namespaces/argocd/finalize -f - 2>/dev/null || true
+
+# Force delete karpenter namespace if stuck
+kubectl get namespace karpenter -o json | \
+  python3 -c "
+import json,sys
+ns=json.load(sys.stdin)
+ns['spec']['finalizers']=[]
+print(json.dumps(ns))
+" | kubectl replace --raw /api/v1/namespaces/karpenter/finalize -f - 2>/dev/null || true
+
 # Give time for ALBs and Karpenter nodes to clean up
 sleep 60
 
