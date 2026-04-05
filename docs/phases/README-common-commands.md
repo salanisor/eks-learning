@@ -75,3 +75,19 @@ aws ec2 describe-nat-gateways \
 aws elbv2 describe-load-balancers \
   --query 'LoadBalancers[*].[LoadBalancerName,State.Code]' \
   --output table --region us-east-1
+
+aws eks list-clusters --region us-east-1
+
+aws ec2 describe-nat-gateways \
+  --filter Name=state,Values=available \
+  --query 'NatGateways[*].[NatGatewayId,State]' \
+  --output table --region us-east-1
+
+aws elbv2 describe-load-balancers \
+  --query 'LoadBalancers[*].[LoadBalancerName,State.Code]' \
+  --output table --region us-east-1
+
+aws ec2 describe-instances \
+  --filters "Name=instance-state-name,Values=running" \
+  --query 'Reservations[*].Instances[*].[InstanceId,InstanceType]' \
+  --output table --region us-east-1
